@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Standards — Dandle Printing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0F2A4A;
+    --navy-deep:#0A1D34;
+    --ink:#161B22;
+    --slate:#5B6472;
+    --paper:#FFFFFF;
+    --paper-2:#F6F7F9;
+    --line:#E3E6EA;
+    --teal:#0E7C7B;
+    --teal-light:#E7F4F3;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  h1,h2,h3{font-family:'Manrope',sans-serif;letter-spacing:-0.01em;line-height:1.1;color:var(--navy-deep);}
+  a{color:inherit;}
+
+  .mark{position:relative;}
+  .mark::before,.mark::after{content:"";position:absolute;width:14px;height:14px;opacity:.4;}
+  .mark::before{top:-1px;left:-1px;border-top:1.5px solid var(--teal);border-left:1.5px solid var(--teal);}
+  .mark::after{bottom:-1px;right:-1px;border-bottom:1.5px solid var(--teal);border-right:1.5px solid var(--teal);}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Manrope';font-weight:800;font-size:20px;color:var(--navy-deep);letter-spacing:-0.01em;}
+  .logo-mark{width:22px;height:22px;flex-shrink:0;}
+  .navlinks{display:flex;gap:36px;font-size:14.5px;font-weight:500;color:var(--slate);}
+  .navlinks a{text-decoration:none;transition:color .15s;}
+  .navlinks a:hover{color:var(--navy-deep);}
+  .navlinks a.current{color:var(--navy-deep);}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-family:'Inter';font-weight:600;font-size:14.5px;padding:12px 24px;border-radius:8px;border:1px solid var(--navy-deep);text-decoration:none;background:var(--navy-deep);color:#fff;transition:background .15s;}
+  .btn:hover{background:var(--teal);border-color:var(--teal);}
+  .btn.ghost{background:transparent;color:var(--navy-deep);}
+  .btn.small{padding:9px 18px;font-size:13.5px;}
+
+  /* hero */
+  .hero{padding:90px 32px 0;}
+  .hero-inner{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.1fr 0.9fr;gap:70px;align-items:center;padding-bottom:70px;}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--teal);background:var(--teal-light);padding:7px 14px;border-radius:20px;margin-bottom:26px;}
+  .eyebrow .dot{width:6px;height:6px;background:var(--teal);border-radius:50%;}
+  h1.headline{font-size:clamp(36px,4.2vw,50px);font-weight:800;margin-bottom:22px;}
+  h1.headline .accent{color:var(--teal);}
+  .hero-sub{font-size:16.5px;color:var(--slate);max-width:480px;}
+
+  .hero-visual{position:relative;background:var(--paper-2);border:1px solid var(--line);border-radius:16px;padding:28px;}
+  .hero-visual .panel-label{font-family:'IBM Plex Mono';font-size:11.5px;color:var(--slate);margin-bottom:18px;display:flex;justify-content:space-between;}
+  .cert-rows{display:flex;flex-direction:column;}
+  .cert-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid var(--line);}
+  .cert-row:first-child{border-top:none;}
+  .cert-row .c-name{font-size:13.5px;font-weight:600;color:var(--navy-deep);}
+  .cert-row .c-status{font-family:'IBM Plex Mono';font-size:11px;color:var(--teal);display:flex;align-items:center;gap:6px;}
+  .cert-row .c-status::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--teal);}
+
+  /* stats */
+  .stats{padding:0 32px 90px;}
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .stat-item{padding:30px 28px;border-left:1px solid var(--line);}
+  .stat-item:first-child{border-left:none;padding-left:0;}
+  .stat-item .val{font-family:'Manrope';font-weight:800;font-size:34px;color:var(--navy-deep);display:block;}
+  .stat-item .lbl{font-size:13px;color:var(--slate);margin-top:4px;}
+
+  /* section shell */
+  section{padding:88px 32px;}
+  .section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;gap:24px;flex-wrap:wrap;}
+  .section-head h2{font-size:clamp(28px,3.4vw,38px);font-weight:800;}
+  .section-tag{font-size:13px;font-weight:600;color:var(--teal);letter-spacing:0.02em;margin-bottom:10px;}
+  .section-desc{max-width:420px;font-size:15px;color:var(--slate);}
+
+  /* standards detail cards */
+  .standards-detail{background:var(--paper-2);}
+  .std-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+  .std-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:30px 28px;}
+  .std-card .std-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;}
+  .std-card .badge{font-family:'IBM Plex Mono';font-size:12px;color:var(--teal);background:var(--teal-light);padding:5px 10px;border-radius:6px;}
+  .std-card .scope{font-family:'IBM Plex Mono';font-size:11px;color:var(--slate);}
+  .std-card h3{font-size:19px;font-weight:700;margin-bottom:10px;}
+  .std-card p{font-size:14px;color:var(--slate);margin-bottom:16px;}
+  .std-meta{display:flex;gap:20px;border-top:1px solid var(--line);padding-top:14px;font-size:12.5px;color:var(--slate);}
+  .std-meta b{color:var(--navy-deep);font-weight:600;display:block;font-size:13px;}
+
+  /* testing process */
+  .test-list{display:flex;flex-direction:column;}
+  .test-row{display:grid;grid-template-columns:100px 1fr 1fr;gap:24px;align-items:center;padding:28px 0;border-top:1px solid var(--line);}
+  .test-row:last-child{border-bottom:1px solid var(--line);}
+  .test-row .step-num{font-family:'IBM Plex Mono';font-size:13px;color:var(--teal);font-weight:500;}
+  .test-row h3{font-size:20px;font-weight:700;}
+  .test-row p{font-size:14px;color:var(--slate);}
+
+  /* material ratings */
+  .rating-table{width:100%;border-collapse:collapse;}
+  .rating-table th{text-align:left;font-size:12px;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:0.04em;padding:0 16px 14px;border-bottom:1px solid var(--line);}
+  .rating-table td{padding:16px;font-size:14px;border-bottom:1px solid var(--line);}
+  .rating-table td:first-child, .rating-table th:first-child{padding-left:0;}
+  .rating-table td.mat{font-weight:600;color:var(--navy-deep);}
+  .rating-pill{display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono';font-size:12px;color:var(--teal);}
+  .rating-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--teal);}
+  .rating-pill.mid{color:#B98900;}
+  .rating-pill.mid::before{background:#F5B700;}
+
+  /* download strip */
+  .downloads{background:var(--navy-deep);color:#fff;}
+  .downloads .section-tag{color:#7FD8D6;}
+  .downloads .section-desc{color:#B7C2D0;}
+  .doc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .doc-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:22px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;text-decoration:none;transition:border-color .15s;}
+  .doc-card:hover{border-color:#7FD8D6;}
+  .doc-card .d-name{font-size:14px;font-weight:600;color:#fff;margin-bottom:4px;}
+  .doc-card .d-meta{font-family:'IBM Plex Mono';font-size:11px;color:#B7C2D0;}
+  .doc-card .d-icon{color:#7FD8D6;flex-shrink:0;}
+
+  /* CTA */
+  .cta-band{padding:90px 32px;text-align:center;background:var(--paper);}
+  .cta-inner{max-width:640px;margin:0 auto;background:var(--navy-deep);border-radius:20px;padding:60px 40px;}
+  .cta-inner h2{font-size:clamp(28px,4vw,38px);color:#fff;margin-bottom:14px;}
+  .cta-inner p{font-size:15px;color:#B7C2D0;max-width:420px;margin:0 auto 30px;}
+  .cta-inner .btn{background:var(--teal);border-color:var(--teal);}
+  .cta-inner .btn:hover{background:#0a615f;}
+
+  footer{padding:56px 32px 34px;border-top:1px solid var(--line);}
+  .foot-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:40px;margin-bottom:44px;}
+  .foot-col h5{font-size:12.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--slate);margin-bottom:14px;}
+  .foot-col a{display:block;font-size:14px;margin-bottom:10px;text-decoration:none;color:var(--navy-deep);}
+  .foot-col a:hover{color:var(--teal);}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--slate);flex-wrap:wrap;gap:12px;}
+
+  @media (max-width:900px){
+    .hero-inner{grid-template-columns:1fr;}
+    .stats-row{grid-template-columns:repeat(2,1fr);}
+    .stat-item:nth-child(3){border-left:none;padding-left:0;}
+    .std-grid{grid-template-columns:1fr;}
+    .doc-grid{grid-template-columns:1fr;}
+    .rating-table{display:block;overflow-x:auto;}
+  }
+  @media (max-width:600px){
+    .navlinks{display:none;}
+    .stats-row{grid-template-columns:1fr;}
+    .stat-item{border-left:none !important;padding-left:0 !important;border-top:1px solid var(--line);padding-top:20px;}
+    .stat-item:first-child{border-top:none;}
+    .test-row{grid-template-columns:1fr;gap:6px;}
+    .std-card .std-top{flex-direction:column;gap:10px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo">
+      <span class="logo-mark"><svg viewBox="0 0 22 22" fill="none"><rect x="1" y="1" width="20" height="20" rx="5" fill="#0F2A4A"/><path d="M6 15V7h4.2a4 4 0 0 1 0 8H6Z" stroke="#0E7C7B" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+      Dandle Printing
+    </div>
+    <nav class="navlinks">
+      <a href="Index.html">Services</a>
+      <a href="#">Materials</a>
+      <a href="index2.html">Process</a>
+      <a href="index4.html" class="current">Standards</a>
+      <a href="index3.html">About us</a>
+    </nav>
+    <a href="#" class="btn small">Get a quote</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow"><span class="dot"></span>Standards and compliance</div>
+      <h1 class="headline">Printed to spec.<br>Checked against <span class="accent">standard</span>.</h1>
+      <p class="hero-sub">Every label, sign and electrical marking we produce is tested against a recognised standard — not just an internal guess at what "good enough" looks like.</p>
+    </div>
+
+    <div class="hero-visual mark">
+      <div class="panel-label"><span>COMPLIANCE REF: DP-STD</span><span>CURRENT</span></div>
+      <div class="cert-rows">
+        <div class="cert-row"><span class="c-name">ISO 9001:2015</span><span class="c-status">Certified</span></div>
+        <div class="cert-row"><span class="c-name">IEC 60417</span><span class="c-status">Compliant</span></div>
+        <div class="cert-row"><span class="c-name">BS 5378</span><span class="c-status">Compliant</span></div>
+        <div class="cert-row"><span class="c-name">UL 969 markings</span><span class="c-status">Compliant</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="wrap">
+    <div class="stats-row">
+      <div class="stat-item"><span class="val">±0.2mm</span><span class="lbl">Print registration tolerance</span></div>
+      <div class="stat-item"><span class="val">10yr</span><span class="lbl">Outdoor UV rating on cast vinyl</span></div>
+      <div class="stat-item"><span class="val">99.6%</span><span class="lbl">On-spec first pass rate</span></div>
+      <div class="stat-item"><span class="val">100%</span><span class="lbl">Batches sample-inspected</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="standards-detail" id="certifications">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-tag">Certifications we hold</div>
+        <h2>Independently<br>audited standards</h2>
+      </div>
+      <p class="section-desc">Each certification below is verified by an external body on a recurring schedule, not self-assessed.</p>
+    </div>
+    <div class="std-grid">
+      <div class="std-card">
+        <div class="std-top"><span class="badge mono">ISO 9001:2015</span><span class="scope">Company-wide</span></div>
+        <h3>Quality management</h3>
+        <p>Covers every process from proofing and material sourcing through to production and dispatch.</p>
+        <div class="std-meta"><div><b>Audited</b>Annually</div><div><b>Scope</b>All production lines</div></div>
+      </div>
+      <div class="std-card">
+        <div class="std-top"><span class="badge mono">IEC 60417</span><span class="scope">Electrical labels</span></div>
+        <h3>Graphical symbols for equipment</h3>
+        <p>Standard hazard, rating and identification symbols used on electrical and machinery labelling.</p>
+        <div class="std-meta"><div><b>Checked</b>Per artwork proof</div><div><b>Scope</b>Electrical labels</div></div>
+      </div>
+      <div class="std-card">
+        <div class="std-top"><span class="badge mono">BS 5378</span><span class="scope">Signage</span></div>
+        <h3>Safety sign colour and shape</h3>
+        <p>Colour coding and shape specification for safety signs used across UK workplaces and sites.</p>
+        <div class="std-meta"><div><b>Checked</b>Per production run</div><div><b>Scope</b>Signage printing</div></div>
+      </div>
+      <div class="std-card">
+        <div class="std-top"><span class="badge mono">UL 969</span><span class="scope">Label materials</span></div>
+        <h3>Marking and labelling systems</h3>
+        <p>Adhesion, legibility and durability testing for labels applied to rated equipment.</p>
+        <div class="std-meta"><div><b>Checked</b>Per material batch</div><div><b>Scope</b>Label printing</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="testing">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-tag">How we test</div>
+        <h2>Compliance checked<br>at every stage</h2>
+      </div>
+      <p class="section-desc">Standards aren't applied once at the end — they're built into the same four stages every job runs through.</p>
+    </div>
+    <div class="test-list">
+      <div class="test-row"><span class="step-num">01</span><h3>Spec review</h3><p>Your artwork and dimensions are checked against the relevant standard before proofing begins.</p></div>
+      <div class="test-row"><span class="step-num">02</span><h3>Material verification</h3><p>Substrate batches are matched to their rated durability and adhesion certificates.</p></div>
+      <div class="test-row"><span class="step-num">03</span><h3>In-run sampling</h3><p>Samples are pulled at intervals through the print run to check registration and colour accuracy.</p></div>
+      <div class="test-row"><span class="step-num">04</span><h3>Final sign-off</h3><p>A quality lead signs off the batch against the standard before it's cleared for dispatch.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--paper-2);" id="ratings">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-tag">Material durability</div>
+        <h2>Rated performance<br>by substrate</h2>
+      </div>
+      <p class="section-desc">Independent test data behind the materials we stock and quote against.</p>
+    </div>
+    <table class="rating-table">
+      <thead>
+        <tr><th>Material</th><th>Outdoor UV life</th><th>Chemical resistance</th><th>Temperature range</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="mat">Cast vinyl</td><td><span class="rating-pill">10 years</span></td><td><span class="rating-pill mid">Moderate</span></td><td>−40°C to 90°C</td></tr>
+        <tr><td class="mat">Polyester film</td><td><span class="rating-pill">7 years</span></td><td><span class="rating-pill">High</span></td><td>−30°C to 120°C</td></tr>
+        <tr><td class="mat">Polycarbonate</td><td><span class="rating-pill">8 years</span></td><td><span class="rating-pill">High</span></td><td>−40°C to 140°C</td></tr>
+        <tr><td class="mat">Aluminium composite</td><td><span class="rating-pill">15 years</span></td><td><span class="rating-pill">High</span></td><td>−50°C to 150°C</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="downloads" id="downloads">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-tag">Documentation</div>
+        <h2>Certificates and<br>test reports</h2>
+      </div>
+      <p class="section-desc">Available on request for procurement, audit or client compliance files.</p>
+    </div>
+    <div class="doc-grid">
+      <a href="#" class="doc-card">
+        <div><div class="d-name">ISO 9001 certificate</div><div class="d-meta mono">PDF · Updated 2026</div></div>
+        <svg class="d-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3v13m0 0 4-4m-4 4-4-4M5 21h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#" class="doc-card">
+        <div><div class="d-name">Material test reports</div><div class="d-meta mono">PDF · Per substrate</div></div>
+        <svg class="d-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3v13m0 0 4-4m-4 4-4-4M5 21h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#" class="doc-card">
+        <div><div class="d-name">Compliance summary</div><div class="d-meta mono">PDF · Updated 2026</div></div>
+        <svg class="d-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3v13m0 0 4-4m-4 4-4-4M5 21h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band" id="quote">
+  <div class="cta-inner">
+    <h2>Need a specific standard<br>verified before you order?</h2>
+    <p>Tell us the standard your job needs to meet and we'll confirm it in writing before anything prints.</p>
+    <a href="#" class="btn">Request a quote</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-col" style="max-width:260px;">
+        <div class="logo" style="margin-bottom:14px;">
+          <span class="logo-mark"><svg viewBox="0 0 22 22" fill="none"><rect x="1" y="1" width="20" height="20" rx="5" fill="#0F2A4A"/><path d="M6 15V7h4.2a4 4 0 0 1 0 8H6Z" stroke="#0E7C7B" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+          Dandle Printing
+        </div>
+        <p style="font-size:13.5px;color:var(--slate);">Industry-standard printing across labels, signage and electrical marking.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Services</h5>
+        <a href="#">Label printing</a>
+        <a href="#">Signage printing</a>
+        <a href="#">Electrical labels</a>
+        <a href="#">Custom and industrial</a>
+      </div>
+      <div class="foot-col">
+        <h5>Company</h5>
+        <a href="#">About us</a>
+        <a href="#">Standards</a>
+        <a href="#">Get a quote</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="#">hello@dandleprinting.co.uk</a>
+        <a href="#">+44 (0) 191 000 0000</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Dandle Printing.</span>
+      <span class="mono">JOB REF: DP-2026-STD</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

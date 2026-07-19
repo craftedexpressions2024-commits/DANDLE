@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Configure electrical labels — Dandle Printing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0F2A4A;
+    --navy-deep:#0A1D34;
+    --ink:#161B22;
+    --slate:#5B6472;
+    --paper:#FFFFFF;
+    --paper-2:#F6F7F9;
+    --line:#E3E6EA;
+    --teal:#0E7C7B;
+    --teal-light:#E7F4F3;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  h1,h2,h3{font-family:'Manrope',sans-serif;letter-spacing:-0.01em;line-height:1.1;color:var(--navy-deep);}
+  a{color:inherit;}
+
+  .mark{position:relative;}
+  .mark::before,.mark::after{content:"";position:absolute;width:14px;height:14px;opacity:.4;}
+  .mark::before{top:-1px;left:-1px;border-top:1.5px solid var(--teal);border-left:1.5px solid var(--teal);}
+  .mark::after{bottom:-1px;right:-1px;border-bottom:1.5px solid var(--teal);border-right:1.5px solid var(--teal);}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Manrope';font-weight:800;font-size:20px;color:var(--navy-deep);letter-spacing:-0.01em;}
+  .logo-mark{width:22px;height:22px;flex-shrink:0;}
+  .navlinks{display:flex;gap:36px;font-size:14.5px;font-weight:500;color:var(--slate);}
+  .navlinks a{text-decoration:none;transition:color .15s;}
+  .navlinks a:hover{color:var(--navy-deep);}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-family:'Inter';font-weight:600;font-size:14.5px;padding:12px 24px;border-radius:8px;border:1px solid var(--navy-deep);text-decoration:none;background:var(--navy-deep);color:#fff;transition:background .15s;cursor:pointer;}
+  .btn:hover{background:var(--teal);border-color:var(--teal);}
+  .btn.ghost{background:transparent;color:var(--navy-deep);}
+  .btn.small{padding:9px 18px;font-size:13.5px;}
+  .btn:disabled{opacity:.45;cursor:not-allowed;}
+  .btn:disabled:hover{background:var(--navy-deep);border-color:var(--navy-deep);}
+
+  .intro{padding:60px 32px 10px;}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--teal);background:var(--teal-light);padding:7px 14px;border-radius:20px;margin-bottom:22px;}
+  .eyebrow .dot{width:6px;height:6px;background:var(--teal);border-radius:50%;}
+  .intro h1{font-size:clamp(32px,4vw,44px);font-weight:800;margin-bottom:14px;}
+  .intro p{font-size:16px;color:var(--slate);max-width:540px;}
+
+  .configurator{padding:50px 32px 100px;}
+  .config-grid{display:grid;grid-template-columns:1.15fr 0.85fr;gap:40px;align-items:start;}
+
+  .panel{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:34px;}
+  .field-group{margin-bottom:30px;}
+  .field-group:last-child{margin-bottom:0;}
+  .field-label{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;font-weight:600;color:var(--navy-deep);margin-bottom:10px;}
+  .field-label .hint{font-family:'IBM Plex Mono';font-size:11.5px;font-weight:400;color:var(--slate);}
+  .dim-row{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;}
+  .dim-x{color:var(--slate);font-size:14px;text-align:center;}
+
+  .num-input{position:relative;}
+  .num-input input{
+    width:100%;padding:12px 44px 12px 14px;border:1px solid var(--line);border-radius:8px;
+    font-family:'IBM Plex Mono';font-size:15px;color:var(--ink);background:var(--paper-2);
+    transition:border-color .15s;
+  }
+  .num-input input:focus{outline:none;border-color:var(--teal);background:var(--paper);}
+  .num-input span{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12.5px;color:var(--slate);}
+
+  .qty-row{display:flex;align-items:center;gap:12px;}
+  .qty-stepper{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--paper-2);}
+  .qty-stepper button{
+    width:40px;height:44px;border:none;background:transparent;font-size:18px;color:var(--navy-deep);cursor:pointer;
+    transition:background .15s;
+  }
+  .qty-stepper button:hover{background:var(--teal-light);color:var(--teal);}
+  .qty-stepper input{
+    width:80px;text-align:center;border:none;background:transparent;font-family:'IBM Plex Mono';font-size:15px;color:var(--ink);
+    padding:12px 0;
+  }
+  .qty-stepper input:focus{outline:none;}
+  .qty-note{font-size:12.5px;color:var(--slate);}
+
+  .option-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .option-card{
+    border:1px solid var(--line);border-radius:10px;padding:14px 12px;cursor:pointer;text-align:left;
+    background:var(--paper-2);transition:border-color .15s,background .15s;
+  }
+  .option-card.active{border-color:var(--teal);background:var(--teal-light);}
+  .option-card .o-name{font-size:13.5px;font-weight:600;color:var(--navy-deep);margin-bottom:3px;}
+  .option-card .o-desc{font-size:11.5px;color:var(--slate);}
+
+  .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--paper-2);border:1px solid var(--line);border-radius:10px;}
+  .toggle-row .t-name{font-size:13.5px;font-weight:600;color:var(--navy-deep);}
+  .toggle-row .t-desc{font-size:12px;color:var(--slate);margin-top:2px;}
+  .switch{position:relative;width:42px;height:24px;flex-shrink:0;}
+  .switch input{opacity:0;width:0;height:0;}
+  .slider-el{position:absolute;cursor:pointer;inset:0;background:var(--line);border-radius:20px;transition:.15s;}
+  .slider-el::before{content:"";position:absolute;height:18px;width:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.15s;}
+  .switch input:checked + .slider-el{background:var(--teal);}
+  .switch input:checked + .slider-el::before{transform:translateX(18px);}
+
+  /* preview panel */
+  .preview-panel{background:var(--navy-deep);border-radius:16px;padding:30px;color:#fff;position:sticky;top:100px;}
+  .preview-panel .panel-label{font-family:'IBM Plex Mono';font-size:11px;color:#B7C2D0;margin-bottom:20px;display:flex;justify-content:space-between;}
+  .label-stage{
+    background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:12px;
+    display:flex;align-items:center;justify-content:center;height:200px;margin-bottom:22px;overflow:hidden;
+  }
+  .label-shape{
+    background:#7FD8D6;border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,0.15) inset;
+    transition:width .12s,height .12s;
+  }
+  .dim-readout{display:flex;justify-content:center;gap:18px;font-family:'IBM Plex Mono';font-size:12px;color:#B7C2D0;margin-bottom:26px;}
+  .dim-readout b{color:#fff;font-weight:500;}
+
+  .price-lines{border-top:1px solid rgba(255,255,255,0.12);padding-top:18px;}
+  .price-line{display:flex;justify-content:space-between;font-size:13.5px;color:#B7C2D0;padding:6px 0;}
+  .price-line b{color:#fff;font-weight:500;}
+  .price-line.discount b{color:#7FD8D6;}
+  .price-total{
+    display:flex;justify-content:space-between;align-items:baseline;
+    border-top:1px solid rgba(255,255,255,0.12);margin-top:14px;padding-top:16px;
+  }
+  .price-total .t-label{font-size:13.5px;color:#B7C2D0;}
+  .price-total .t-value{font-family:'Manrope';font-weight:800;font-size:28px;}
+  .price-total .t-unit{font-family:'IBM Plex Mono';font-size:11.5px;color:#B7C2D0;display:block;margin-top:2px;}
+
+  .preview-panel .btn{width:100%;justify-content:center;margin-top:22px;background:var(--teal);border-color:var(--teal);}
+  .preview-panel .btn:hover{background:#0a615f;}
+
+  .warn-note{font-size:12px;color:#F5B700;margin-top:10px;display:none;}
+  .warn-note.show{display:block;}
+
+  footer{padding:56px 32px 34px;border-top:1px solid var(--line);}
+  .foot-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:40px;margin-bottom:44px;}
+  .foot-col h5{font-size:12.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--slate);margin-bottom:14px;}
+  .foot-col a{display:block;font-size:14px;margin-bottom:10px;text-decoration:none;color:var(--navy-deep);}
+  .foot-col a:hover{color:var(--teal);}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--slate);flex-wrap:wrap;gap:12px;}
+
+  @media (max-width:900px){
+    .config-grid{grid-template-columns:1fr;}
+    .preview-panel{position:static;}
+    .option-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:600px){
+    .navlinks{display:none;}
+    .panel{padding:24px;}
+    .option-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo">
+      <span class="logo-mark"><svg viewBox="0 0 22 22" fill="none"><rect x="1" y="1" width="20" height="20" rx="5" fill="#0F2A4A"/><path d="M6 15V7h4.2a4 4 0 0 1 0 8H6Z" stroke="#0E7C7B" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+      Dandle Printing
+    </div>
+    <nav class="navlinks">
+      <a href="index.html">Services</a>
+      <a href="#">Materials</a>
+      <a href="index2.html">Process</a>
+      <a href="index4.html">Standards</a>
+      <a href="index3.html">About Us</a>
+    </nav>
+    <a href="index2.html" class="btn small">Get a quote</a>
+  </div>
+</header>
+
+<section class="intro">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span>Electrical labels / Configure</div>
+    <h1>Build your electrical label</h1>
+    <p>Set your exact dimensions and quantity — the price updates as you go. Every label meets IEC 60417 marking standards as standard.</p>
+  </div>
+</section>
+
+<section class="configurator">
+  <div class="wrap">
+    <div class="config-grid">
+
+      <div class="panel">
+        <div class="field-group">
+          <div class="field-label">Label size <span class="hint">10–300mm per side</span></div>
+          <div class="dim-row">
+            <div class="num-input">
+              <input type="number" id="widthInput" value="80" min="10" max="300" step="1">
+              <span>mm W</span>
+            </div>
+            <div class="dim-x">×</div>
+            <div class="num-input">
+              <input type="number" id="heightInput" value="50" min="10" max="300" step="1">
+              <span>mm H</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Quantity <span class="hint">100 label minimum</span></div>
+          <div class="qty-row">
+            <div class="qty-stepper">
+              <button type="button" id="qtyDown" aria-label="Decrease quantity">−</button>
+              <input type="number" id="qtyInput" value="100" min="100" step="50">
+              <button type="button" id="qtyUp" aria-label="Increase quantity">+</button>
+            </div>
+            <span class="qty-note">labels per order</span>
+          </div>
+          <div class="warn-note mono" id="qtyWarn">Minimum order is 100 labels — adjusted automatically.</div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Material</div>
+          <div class="option-grid" id="materialOptions">
+            <div class="option-card active" data-material="polycarbonate" data-mult="1.3">
+              <div class="o-name">Polycarbonate</div>
+              <div class="o-desc">Heat and UV stable</div>
+            </div>
+            <div class="option-card" data-material="polyester" data-mult="1.0">
+              <div class="o-name">Polyester</div>
+              <div class="o-desc">Chemical resistant</div>
+            </div>
+            <div class="option-card" data-material="vinyl" data-mult="0.85">
+              <div class="o-name">Vinyl</div>
+              <div class="o-desc">Flexible, general use</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Finish</div>
+          <div class="option-grid" id="finishOptions">
+            <div class="option-card active" data-finish="matte" data-mult="1.0">
+              <div class="o-name">Matte</div>
+              <div class="o-desc">Low glare</div>
+            </div>
+            <div class="option-card" data-finish="gloss" data-mult="1.05">
+              <div class="o-name">Gloss</div>
+              <div class="o-desc">High contrast</div>
+            </div>
+            <div class="option-card" data-finish="brushed" data-mult="1.18">
+              <div class="o-name">Brushed metal</div>
+              <div class="o-desc">Nameplate look</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="toggle-row">
+            <div>
+              <div class="t-name">Adhesive backing</div>
+              <div class="t-desc">Permanent industrial adhesive, pre-applied</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="adhesiveToggle" checked>
+              <span class="slider-el"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-panel mark">
+        <div class="panel-label"><span>JOB REF: DP-CFG</span><span id="statusLabel">DRAFT</span></div>
+        <div class="label-stage">
+          <div class="label-shape" id="labelShape"></div>
+        </div>
+        <div class="dim-readout">
+          <span>W <b id="wReadout">80mm</b></span>
+          <span>H <b id="hReadout">50mm</b></span>
+          <span>Qty <b id="qReadout">100</b></span>
+        </div>
+        <div class="price-lines">
+          <div class="price-line"><span>Unit price</span><b id="unitPrice">£0.00</b></div>
+          <div class="price-line"><span>Subtotal</span><b id="subtotalPrice">£0.00</b></div>
+          <div class="price-line discount" id="discountLine" style="display:none;"><span>Volume discount</span><b id="discountAmount">−0%</b></div>
+        </div>
+        <div class="price-total">
+          <div>
+            <div class="t-label">Total</div>
+            <span class="t-unit" id="perLabelNote">£0.00 per label</span>
+          </div>
+          <div class="t-value" id="totalPrice">£0.00</div>
+        </div>
+        <button class="btn" id="quoteBtn">Add to quote</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-col" style="max-width:260px;">
+        <div class="logo" style="margin-bottom:14px;">
+          <span class="logo-mark"><svg viewBox="0 0 22 22" fill="none"><rect x="1" y="1" width="20" height="20" rx="5" fill="#0F2A4A"/><path d="M6 15V7h4.2a4 4 0 0 1 0 8H6Z" stroke="#0E7C7B" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+          Dandle Printing
+        </div>
+        <p style="font-size:13.5px;color:var(--slate);">Industry-standard printing across labels, signage and electrical marking.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Services</h5>
+        <a href="#">Label printing</a>
+        <a href="#">Signage printing</a>
+        <a href="#">Electrical labels</a>
+        <a href="#">Custom and industrial</a>
+      </div>
+      <div class="foot-col">
+        <h5>Company</h5>
+        <a href="#">Our process</a>
+        <a href="#">Standards</a>
+        <a href="#">Get a quote</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="#">hello@dandleprinting.co.uk</a>
+        <a href="#">+44 (0) 191 000 0000</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Dandle Printing.</span>
+      <span class="mono">JOB REF: DP-2026-CFG</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var BASE_FEE = 0.35;
+  var RATE_PER_CM2 = 0.045;
+  var MIN_QTY = 100;
+  var MIN_DIM = 10, MAX_DIM = 300;
+
+  var widthInput = document.getElementById('widthInput');
+  var heightInput = document.getElementById('heightInput');
+  var qtyInput = document.getElementById('qtyInput');
+  var qtyDown = document.getElementById('qtyDown');
+  var qtyUp = document.getElementById('qtyUp');
+  var qtyWarn = document.getElementById('qtyWarn');
+  var adhesiveToggle = document.getElementById('adhesiveToggle');
+  var materialOptions = document.querySelectorAll('#materialOptions .option-card');
+  var finishOptions = document.querySelectorAll('#finishOptions .option-card');
+
+  var labelShape = document.getElementById('labelShape');
+  var wReadout = document.getElementById('wReadout');
+  var hReadout = document.getElementById('hReadout');
+  var qReadout = document.getElementById('qReadout');
+  var unitPrice = document.getElementById('unitPrice');
+  var subtotalPrice = document.getElementById('subtotalPrice');
+  var discountLine = document.getElementById('discountLine');
+  var discountAmount = document.getElementById('discountAmount');
+  var totalPrice = document.getElementById('totalPrice');
+  var perLabelNote = document.getElementById('perLabelNote');
+  var statusLabel = document.getElementById('statusLabel');
+
+  function selectedMult(nodeList){
+    var active = null;
+    nodeList.forEach(function(n){ if(n.classList.contains('active')) active = n; });
+    return active ? parseFloat(active.getAttribute('data-mult')) : 1;
+  }
+
+  function fmt(n){
+    return '£' + n.toLocaleString('en-GB', {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+
+  function clamp(v, min, max){ return Math.min(Math.max(v, min), max); }
+
+  function discountRate(qty){
+    if(qty >= 2500) return 0.15;
+    if(qty >= 1000) return 0.10;
+    if(qty >= 500) return 0.05;
+    return 0;
+  }
+
+  function updateShape(w, h){
+    var maxBox = 160;
+    var scale = Math.min(maxBox / w, maxBox / h, 2.2);
+    labelShape.style.width = Math.round(w * scale) + 'px';
+    labelShape.style.height = Math.round(h * scale) + 'px';
+  }
+
+  function recalc(){
+    var w = clamp(parseInt(widthInput.value, 10) || MIN_DIM, MIN_DIM, MAX_DIM);
+    var h = clamp(parseInt(heightInput.value, 10) || MIN_DIM, MIN_DIM, MAX_DIM);
+    widthInput.value = w;
+    heightInput.value = h;
+
+    var qtyRaw = parseInt(qtyInput.value, 10) || MIN_QTY;
+    var qty = Math.max(qtyRaw, MIN_QTY);
+    if(qtyRaw < MIN_QTY){
+      qtyInput.value = MIN_QTY;
+      qtyWarn.classList.add('show');
+    } else {
+      qtyInput.value = qty;
+      qtyWarn.classList.remove('show');
+    }
+
+    var areaCm2 = (w * h) / 100;
+    var materialMult = selectedMult(materialOptions);
+    var finishMult = selectedMult(finishOptions);
+    var adhesiveAdd = adhesiveToggle.checked ? 0.06 : 0;
+
+    var unit = (BASE_FEE + areaCm2 * RATE_PER_CM2) * materialMult * finishMult + adhesiveAdd;
+    var subtotal = unit * qty;
+    var discount = discountRate(qty);
+    var total = subtotal * (1 - discount);
+
+    updateShape(w, h);
+    wReadout.textContent = w + 'mm';
+    hReadout.textContent = h + 'mm';
+    qReadout.textContent = qty.toLocaleString('en-GB');
+
+    unitPrice.textContent = fmt(unit);
+    subtotalPrice.textContent = fmt(subtotal);
+
+    if(discount > 0){
+      discountLine.style.display = 'flex';
+      discountAmount.textContent = '−' + Math.round(discount * 100) + '%';
+    } else {
+      discountLine.style.display = 'none';
+    }
+
+    totalPrice.textContent = fmt(total);
+    perLabelNote.textContent = fmt(total / qty) + ' per label';
+    statusLabel.textContent = 'LIVE';
+  }
+
+  [widthInput, heightInput, qtyInput, adhesiveToggle].forEach(function(el){
+    el.addEventListener('input', recalc);
+    el.addEventListener('change', recalc);
+  });
+
+  qtyDown.addEventListener('click', function(){
+    qtyInput.value = Math.max(MIN_QTY, (parseInt(qtyInput.value,10) || MIN_QTY) - 50);
+    recalc();
+  });
+  qtyUp.addEventListener('click', function(){
+    qtyInput.value = (parseInt(qtyInput.value,10) || MIN_QTY) + 50;
+    recalc();
+  });
+
+  function wireOptions(nodeList){
+    nodeList.forEach(function(card){
+      card.addEventListener('click', function(){
+        nodeList.forEach(function(c){ c.classList.remove('active'); });
+        card.classList.add('active');
+        recalc();
+      });
+    });
+  }
+  wireOptions(materialOptions);
+  wireOptions(finishOptions);
+
+  document.getElementById('quoteBtn').addEventListener('click', function(){
+    statusLabel.textContent = 'ADDED';
+    setTimeout(function(){ statusLabel.textContent = 'LIVE'; }, 1400);
+  });
+
+  recalc();
+})();
+</script>
+
+</body>
+</html>
